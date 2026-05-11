@@ -38,4 +38,7 @@ class GameObject {
     public GameObject getChild(String name) {
         return children.get(name);
     }
+    public Transform transform() {
+        return this.getComponent(Transform.class);
+    }
 }

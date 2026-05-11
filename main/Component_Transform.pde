@@ -10,4 +10,16 @@ class Transform extends Component {
         this.position.set(x, y);
         this.scale = scale;
     }
+
+    public void SetPosition(float x, float y) {
+        this.position.set(x, y);
+    }
+
+    public void SetPosition(PVector pos) {
+        this.position.set(pos.x, pos.y);
+    }
+
+    public void Move(PVector vector) {
+        position.add(vector);
+    }
 }
