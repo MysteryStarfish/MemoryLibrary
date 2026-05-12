@@ -7,19 +7,46 @@ class MapHandler {
     private int[][] characterMap;
     private JsonReader jsonReader;
 
-    public MapHandler(int x, int y, int playerX, int playerY, JsonReader jsonReader, PlayerMove playerMove) {
+    public MapHandler(int x, int y, int playerX, int playerY, 
+        JsonReader jsonReader, 
+        PlayerMove playerMove,
+        InputReader inputReader
+    ) {
         mapSizeX = x;
         mapSizeY = y;
         map = new int[mapSizeY][mapSizeX];
         characterMap = new int[mapSizeY][mapSizeX];
         PutPlayer(playerX, playerY);
         InfoInit(jsonReader, playerMove);
+        
+        inputReader.OnMoveUp.Register(this::MoveUpPlayer);
+        inputReader.OnMoveDown.Register(this::MoveDownPlayer);
+        inputReader.OnMoveLeft.Register(this::MoveLeftPlayer);
+        inputReader.OnMoveRight.Register(this::MoveRightPlayer);
+    } 
+    
+    public MapHandler(int playerX, int playerY, 
+        JsonReader jsonReader, 
+        PlayerMove playerMove,
+        InputReader inputReader
+    ) {
+        InfoInit(jsonReader, playerMove);
+        mapSizeX = width/gridSize;
+        mapSizeY = height/gridSize;
+        map = new int[mapSizeY][mapSizeX];
+        characterMap = new int[mapSizeY][mapSizeX];
+        PutPlayer(playerX, playerY);
+        
+        inputReader.OnMoveUp.Register(this::MoveUpPlayer);
+        inputReader.OnMoveDown.Register(this::MoveDownPlayer);
+        inputReader.OnMoveLeft.Register(this::MoveLeftPlayer);
+        inputReader.OnMoveRight.Register(this::MoveRightPlayer);
     } 
     public void InfoInit(JsonReader jsonReader, PlayerMove playerMove) {
         this.jsonReader = jsonReader;
         this.playerMove = playerMove;
         // var data = jsonReader.ReadMapJson();
-        gridSize = 50;
+        gridSize = 10;
         // gridSize = data.gridSize;
     }
     
@@ -43,8 +70,11 @@ class MapHandler {
     }
     public void MovePlayer(int x, int y) {
         PVector playerPosition = FindPlayer();
-        characterMap[(int)playerPosition.y][(int)playerPosition.x] = 0;
+        int oldPositionX = (int)playerPosition.x;
+        int oldPositionY = (int)playerPosition.y;
         playerPosition.add(new PVector(x, y));
+        if (playerPosition.x <= 0 || playerPosition.x >= mapSizeX || playerPosition.y <= 0 || playerPosition.y >= mapSizeY) return;
+        characterMap[oldPositionY][oldPositionX] = 0;
         characterMap[(int)playerPosition.y][(int)playerPosition.x] = 1;
     }
     public void MoveLeftPlayer() {
@@ -63,7 +93,7 @@ class MapHandler {
         PVector res;
         for (int y = 0; y < mapSizeY; y++) {
             for (int x = 0; x < mapSizeX; x++) {
-                if (characterMap[x][y] == 1) {
+                if (characterMap[y][x] == 1) {
                     res = new PVector(x, y);
                     return res;
                 }

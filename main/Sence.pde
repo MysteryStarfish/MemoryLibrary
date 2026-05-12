@@ -18,5 +18,6 @@ abstract class Scene {
         for (var gameObject : gameObjects) {
             gameObject.update();
         }
+        gameObjects.removeIf(go -> go.isDestroyed);
     }
 }

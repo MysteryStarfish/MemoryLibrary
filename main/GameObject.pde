@@ -2,11 +2,16 @@ class GameObject {
     String name;
     HashMap<Class<? extends Component>, Component> components;
     HashMap<String, GameObject> children;
+    public boolean isDestroyed = false;
 
     public GameObject(String name) {
         this.name = name;
         components = new HashMap<Class<? extends Component>, Component>();
         children = new HashMap<String, GameObject>();
+    }
+
+    public void Destroy() {
+        this.isDestroyed = true;
     }
 
     public void update() {
