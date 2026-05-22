@@ -6,4 +6,5 @@ abstract class Component {
     }
     void start() {;}
     void update() {;}
+    void mousePressed() {;}
 }

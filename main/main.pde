@@ -1,41 +1,40 @@
-MapScene testScene;
+Scene currentScene;
 JsonReader jsonReader;
-GameObject player;
+InputReader inputReader;
+MathSolve mathSolve;
+
 
 void setup() {
-    size(800, 600);
+    size(1152, 768);
 
-    player = CreatPlayerObject();
+    init();
+
+    var testScene = new TestScene(jsonReader, inputReader);
+    currentScene = testScene.CreatScene();
+
+    JsonReader reader = new JsonReader();
+    reader.ReadMapJson("map1");
+}
+
+void init() {
     jsonReader = new JsonReader();
-    CreatTestScene();
-}
-
-void CreatTestScene() {
-    MapHandler testMap;
-    testMap = new MapHandler(10, 10, 0, 0, jsonReader, player.getComponent(PlayerMove.class));
-    testScene = new MapScene(testMap);
-    testScene.addGameObject(player);
-}
-
-GameObject CreatPlayerObject() {
-    GameObject player = new GameObject("Player");
-
-    Transform t = new Transform(width/2, height/2);
-    player.addComponent(t);
-
-    Sprite s = new Sprite("Raphtalia.png", 0.5);
-    player.addComponent(s);
-
-    PlayerMove m = new PlayerMove();
-    player.addComponent(m);
-    
-    return player;
+    inputReader = new InputReader();
 }
 
 void draw() {
-    testScene.update();
-    //println(player.transform().position.x);
-    //println(player.transform().position.y);
-    //var image = loadImage("Raphtalia.png");
-    //image(image, player.transform().position.x, player.transform().position.y);
+    background(10, 10, 10);
+    currentScene.update();
+}
+
+void keyPressed() {
+    inputReader.keyPressed();
+    inputReader.update();
+}
+
+void keyReleased() {
+    inputReader.keyReleased();
+}
+
+void mousePressed() {
+    currentScene.mousePressed();
 }

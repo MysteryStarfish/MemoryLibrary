@@ -6,8 +6,7 @@ class MapScene extends Scene {
     
     @Override
     void update() {
-        background(0);
-        super.update();
         mapHandler.update();
+        super.update();
     }
 }

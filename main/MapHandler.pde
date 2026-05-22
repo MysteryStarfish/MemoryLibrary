@@ -6,59 +6,72 @@ class MapHandler {
     private int[][] map;
     private int[][] characterMap;
     private JsonReader jsonReader;
+    private NPCHandler npcHandler;
+    private PVector playerPosition;
+    private boolean debugPrintMap = false;
 
     public MapHandler(int x, int y, int playerX, int playerY, 
         JsonReader jsonReader, 
         PlayerMove playerMove,
-        InputReader inputReader
+        InputReader inputReader,
+        NPCHandler npcHandler
     ) {
         mapSizeX = x;
         mapSizeY = y;
         map = new int[mapSizeY][mapSizeX];
         characterMap = new int[mapSizeY][mapSizeX];
         PutPlayer(playerX, playerY);
+        playerPosition = new PVector(playerX, playerY);
+        npcHandler = new NPCHandler();
         InfoInit(jsonReader, playerMove);
         
         inputReader.OnMoveUp.Register(this::MoveUpPlayer);
         inputReader.OnMoveDown.Register(this::MoveDownPlayer);
         inputReader.OnMoveLeft.Register(this::MoveLeftPlayer);
         inputReader.OnMoveRight.Register(this::MoveRightPlayer);
+        inputReader.OnInteract.Register(this::DetectdAroundNPC);
     } 
     
     public MapHandler(int playerX, int playerY, 
         JsonReader jsonReader, 
         PlayerMove playerMove,
-        InputReader inputReader
+        InputReader inputReader,
+        NPCHandler npcHandler
     ) {
         InfoInit(jsonReader, playerMove);
-        mapSizeX = width/gridSize;
-        mapSizeY = height/gridSize;
+        mapSizeX = jsonReader.ReadMapSizeWidth("map1") + 1;
+        mapSizeY = jsonReader.ReadMapSizeHeight("map1") + 1;
         map = new int[mapSizeY][mapSizeX];
         characterMap = new int[mapSizeY][mapSizeX];
         PutPlayer(playerX, playerY);
-        
+        playerPosition = new PVector(playerX, playerY);
+        this.npcHandler = npcHandler;
+
         inputReader.OnMoveUp.Register(this::MoveUpPlayer);
         inputReader.OnMoveDown.Register(this::MoveDownPlayer);
         inputReader.OnMoveLeft.Register(this::MoveLeftPlayer);
         inputReader.OnMoveRight.Register(this::MoveRightPlayer);
+        inputReader.OnInteract.Register(this::DetectdAroundNPC);
     } 
     public void InfoInit(JsonReader jsonReader, PlayerMove playerMove) {
         this.jsonReader = jsonReader;
         this.playerMove = playerMove;
-        // var data = jsonReader.ReadMapJson();
-        gridSize = 10;
-        // gridSize = data.gridSize;
+        gridSize = jsonReader.ReadGridSize();
+
+        mapVisualizer = new MapVisualizer(jsonReader);
     }
     
     public void update() {
-        playerMove.Move(MapToPosition(FindPlayer()));
+        mapVisualizer.drawMap("map1");
+        playerMove.Move(MapToPosition(playerPosition));
+        MoveNPC();
     }
-    public PVector getGridPosition(int x, int y) {
-        var xPos = x * gridSize; // TODO: xPos = x * gridSize;
-        var yPos = y * gridSize; // TODO: xPos = x * gridSize;
+    public PVector GetGridPosition(int x, int y) {
+        var xPos = x * gridSize; 
+        var yPos = y * gridSize; 
         return new PVector(xPos, yPos);
     }
-    public int[][] getMap() {
+    public int[][] GetMap() {
         int[][] copy = new int[map.length][map[0].length];
         for (int i = 0; i < map.length; i++) {
             System.arraycopy(map[i], 0, copy[i], 0, map[i].length);
@@ -68,14 +81,55 @@ class MapHandler {
     public void PutPlayer(int x, int y) {
         characterMap[y][x] = 1;
     }
+    public void PutNPC() {
+        for (int i = 0; i < npcHandler.npcs.size(); i++) {
+            PVector npcPosition = npcHandler.npcs.get(i).MapPosition();
+            characterMap[(int)npcPosition.y][(int)npcPosition.x] = npcHandler.npcs.get(i).getId();
+        }
+    }
+    public void MoveNPC() {
+        PutNPC();
+        for (int i = 0; i < npcHandler.npcs.size(); i++) {
+            NPC npc = npcHandler.npcs.get(i);
+            npc.Move(MapToPosition(npc.MapPosition()));
+        }
+    }
+    public void DetectdAroundNPC() {
+        // print("Detecting NPC...");
+        // PrintMap();
+        PVector playerPosition = this.playerPosition;
+
+        for (int y = (int)playerPosition.y - 1; y <= (int)playerPosition.y + 1; y++) {
+            for (int x = (int)playerPosition.x - 1; x <= (int)playerPosition.x + 1; x++) {
+                if (x == (int)playerPosition.x && y == (int)playerPosition.y) continue;
+                if (x <= 0 || x >= mapSizeX || y <= 0 || y >= mapSizeY) continue;
+                if (characterMap[y][x] != 0) {
+                    print("NPC Detected! ID: " + characterMap[y][x]);
+                    npcHandler.InteractWithNPC(characterMap[y][x]);
+                }
+            }
+        }
+    }
+    void PrintMap() {
+        for (int y = 0; y < mapSizeY; y++) {
+            for (int x = 0; x < mapSizeX; x++) {
+                print(characterMap[y][x] + " ");
+            }
+            println();
+        }
+    }
     public void MovePlayer(int x, int y) {
-        PVector playerPosition = FindPlayer();
         int oldPositionX = (int)playerPosition.x;
         int oldPositionY = (int)playerPosition.y;
-        playerPosition.add(new PVector(x, y));
-        if (playerPosition.x <= 0 || playerPosition.x >= mapSizeX || playerPosition.y <= 0 || playerPosition.y >= mapSizeY) return;
+        int newPositionX = oldPositionX + x;
+        int newPositionY = oldPositionY + y;
+        if (debugPrintMap) PrintMap();
+        if (newPositionX <= 0 || newPositionX >= mapSizeX || newPositionY <= 0 || newPositionY >= mapSizeY) return;
+        if (characterMap[newPositionY][newPositionX] != 0) return;
+        // println(playerPosition.x + " " + playerPosition.y);
         characterMap[oldPositionY][oldPositionX] = 0;
-        characterMap[(int)playerPosition.y][(int)playerPosition.x] = 1;
+        characterMap[newPositionY][newPositionX] = 1;
+        playerPosition.set(newPositionX, newPositionY);
     }
     public void MoveLeftPlayer() {
         MovePlayer(-1, 0);
@@ -94,6 +148,7 @@ class MapHandler {
         for (int y = 0; y < mapSizeY; y++) {
             for (int x = 0; x < mapSizeX; x++) {
                 if (characterMap[y][x] == 1) {
+                    // println(x + " " + y);
                     res = new PVector(x, y);
                     return res;
                 }
@@ -104,6 +159,6 @@ class MapHandler {
     }
 
     private PVector MapToPosition(PVector place) {
-        return new PVector(place.x * gridSize, place.y * gridSize);
+        return new PVector(place.x * gridSize - gridSize/2, place.y * gridSize - gridSize/2);
     }
 }

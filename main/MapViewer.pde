@@ -1,18 +1,25 @@
 class MapVisualizer {
-    public MapVisualizer(PImage playerImg) {
-        //this.playerImg = playerImg;
+    JsonReader jsonReader;
+
+    public MapVisualizer(JsonReader jsonReader) {
+        this.jsonReader = jsonReader;
     }
   
-    //public void update(int[][] map) {
-    //    updateCharacter(map);
-    //}
+    public void drawMap(String mapName) {
+        int[][] map = jsonReader.ReadMapJson(mapName);
+        int gridSize = jsonReader.ReadGridSize();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                var val = map[i][j];
+                PImage gridImage = getGrid(val);
+                if (gridImage != null) {
+                    image(gridImage, j * gridSize, i * gridSize, gridSize, gridSize);
+                }
+            }
+        }
+    }
 
-    //public void updateCharacter(int[][] map) {
-    //    for (int[] row : map) {
-    //        for (int value : row) {
-    //            PImage image = playerImg;
-                
-    //        }
-    //    }
-    //}
+    private PImage getGrid(int val) {
+        return loadImage("assets/TileSets/" + String.valueOf(val) + ".png");
+    }
 }

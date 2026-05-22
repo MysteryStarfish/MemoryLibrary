@@ -1,8 +1,10 @@
 abstract class Scene {
     ArrayList<GameObject> gameObjects;
+    ArrayList<Runnable> OnUpdate;
   
     public Scene() {
         gameObjects = new ArrayList();
+        OnUpdate = new ArrayList();
     }
     void addGameObject(GameObject gameObject) {
         gameObjects.add(gameObject);
@@ -15,9 +17,24 @@ abstract class Scene {
     }
 
     void update() {
+        for (var action : OnUpdate) {
+            action.run();
+            // println("hi");
+        }
         for (var gameObject : gameObjects) {
             gameObject.update();
+            // println("hi");
         }
         gameObjects.removeIf(go -> go.isDestroyed);
+    }
+
+    void mousePressed() {
+        for (var gameObject : gameObjects) {
+            gameObject.mousePressed();
+        }
+    }
+
+    public void addOnUpdate(Runnable action) {
+        OnUpdate.add(action);
     }
 }

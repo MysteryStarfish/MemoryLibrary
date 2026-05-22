@@ -15,7 +15,7 @@ class Sprite extends Component {
     }
 
     public Sprite(String filename) {
-        this(filename, 1.0);
+        this(filename, 1.0f);
     }
 
     public PImage getImage() {

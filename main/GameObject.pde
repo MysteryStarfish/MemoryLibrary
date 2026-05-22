@@ -23,6 +23,15 @@ class GameObject {
         }
     }
 
+    public void mousePressed() {
+        for (Component component : components.values()) {
+            component.mousePressed();
+        }
+        for (GameObject child : children.values()) {
+            child.mousePressed();
+        }
+    }
+
     public <T extends Component> void addComponent(T component) {
         components.put(component.getClass(), component);
         component.setGameObject(this);
