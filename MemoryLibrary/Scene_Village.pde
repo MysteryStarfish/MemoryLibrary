@@ -344,7 +344,7 @@ class VillageScene extends Scene{
         } else if (storyStep == 2) {
             l.AddInteraction(() -> talkBox.ShowText("厚厚厚，你要找館長？年輕人，你老花了。\n我不是館長，也沒有老花，厚厚", "LEADER", () -> { l.CompleteInteraction(); }));
         } else if (storyStep == 3) {
-            l.AddInteraction(() -> talkBox.ShowText("厚厚厚，天氣真好...你誰，你是書店老闆？", "LEADER", () -> { l.CompleteInteraction(); }));
+            l.AddInteraction(() -> talkBox.ShowText("厚厚厚，原來數學剛才才恢復正常，難怪數字看起來都那麼小\n你說是因為老花？呃厚厚厚，沒有的事", "LEADER", () -> { l.CompleteInteraction(); }));
         } else if (storyStep == 4) {
             l.AddInteraction(() -> gameHandler.RunWithOnExit(gameHandler::Dialogue4, () -> 
                 {
@@ -366,7 +366,7 @@ class VillageScene extends Scene{
         var f = farmer.getComponent(NPC.class);
         f.ClearInteraction();
         if (storyStep == 1) {
-            f.AddInteraction(() -> talkBox.ShowText("這把鐮刀...不是，鋤頭真不好使，書店老闆不知道有沒有想法", "FARMER", () -> { f.CompleteInteraction(); }));
+            f.AddInteraction(() -> talkBox.ShowText("這把叉子...不是，耙子真不好使，書店不知道有沒有相關的書", "FARMER", () -> { f.CompleteInteraction(); }));
         } else if (storyStep == 2) {
             f.AddInteraction(() -> talkBox.ShowText("館長？他就住...喔沒有，\"待\"在圖書館裡阿，往上走就是了", "FARMER", () -> { f.CompleteInteraction(); }));
         } else if (storyStep == 3) {
@@ -425,7 +425,7 @@ class VillageScene extends Scene{
         NPC m = new NPC(4, 19, 4, npcHandler);
         npc.addComponent(m);
 
-        m.AddInteraction(() -> talkBox.ShowText("厚厚厚，天氣真好...你誰，書店老闆是你?", "LEADER", () -> { m.CompleteInteraction(); }));
+        m.AddInteraction(() -> talkBox.ShowText("厚厚厚，天氣真好...你誰，你是書店老闆？", "LEADER", () -> { m.CompleteInteraction(); }));
         
         return npc;
     }
@@ -442,7 +442,7 @@ class VillageScene extends Scene{
         NPC m = new NPC(5, 6, 4, npcHandler);
         npc.addComponent(m);
 
-        m.AddInteraction(() -> talkBox.ShowText("這把鐮刀...不是，鋤頭真不好使，書店老闆不知道有沒有想法", "FARMER", () -> { m.CompleteInteraction(); }));
+        m.AddInteraction(() -> talkBox.ShowText("這把叉子...不是，耙子真不好使，書店老闆不知道有沒有相關的書", "FARMER", () -> { m.CompleteInteraction(); }));
         
         return npc;
     }
