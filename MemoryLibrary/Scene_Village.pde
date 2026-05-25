@@ -476,7 +476,7 @@ class VillageScene extends Scene{
         NPC m = new NPC(7, 19, 12, npcHandler);
         npc.addComponent(m);
 
-        m.AddInteraction(() -> talkBox.ShowText("哈哈哈", "NPC2", () -> { m.CompleteInteraction(); }));
+        m.AddInteraction(() -> talkBox.ShowText("喔。", "NPC2", () -> { m.CompleteInteraction(); }));
         
         return npc;
     }

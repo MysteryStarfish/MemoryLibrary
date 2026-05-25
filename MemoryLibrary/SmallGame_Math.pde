@@ -56,7 +56,7 @@ class MathSolve extends SmallGame {
 
     bg = loadImage("assets/background/library.jpg");
     portraits[0] = new ActorSprite(path + "player.png", 0.5); 
-    portraits[1] = new ActorSprite(path + "gym.png", 0.5);  
+    portraits[1] = new ActorSprite(path + "gym.png", 0.25);  
   }
 
   @Override

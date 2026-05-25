@@ -8,14 +8,14 @@ class Science2Solve extends SmallGame {
   // --- 全域變數 ---
   String[] dialogue = {
     "館長：這次是什麼？", 
-    "女孩：自然現象變得不一致，順序亂了。",
+    "玩家：自然現象變得不一致，順序亂了。",
     "館長：那就是『因果與順序』的問題。自然本來就依照規律運作。",
     "館長：一旦順序錯亂，就會出現這種現象。",
-    "女孩：書頁內容寫著：「開花 → 發芽 → 成長」、「下雨 → 雲形成 → 蒸發」...",
-    "女孩：順序被顛倒了……這些原本應該是連續的過程。",
+    "玩家：書頁內容寫著：「開花 → 發芽 → 成長」、「下雨 → 雲形成 → 蒸發」...",
+    "玩家：順序被顛倒了……這些原本應該是連續的過程。",
     "館長：只要把順序恢復，自然就會回到原本的狀態。",
-    "女孩：……開始吧。",
-    "女孩：自然的記憶似乎恢復了。" 
+    "玩家：……開始吧。",
+    "玩家：自然的記憶似乎恢復了。" 
   };
   int[] dialogueOwners = {1, 0, 1, 1, 0, 0, 1, 0, 0};
 
@@ -57,7 +57,7 @@ class Science2Solve extends SmallGame {
     String path = "assets/2Dlive/";
     bg = loadImage("assets/background/library.jpg"); 
     portraits[0] = new ActorSprite(path + "player.png", 0.5f); 
-    portraits[1] = new ActorSprite(path + "gym.png", 0.5f);
+    portraits[1] = new ActorSprite(path + "gym.png", 0.25f);
     resetBlocks();
   }
 
