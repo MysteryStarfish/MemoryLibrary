@@ -10,7 +10,16 @@
 - [程式碼 GitHub](https://github.com/MysteryStarfish/MemoryLibrary)
 
 ### 美術素材
-- [雲端](https://drive.google.com/drive/folders/130g8cAS4XlzX-xoWsCZOlCxZaDfyB-mb?usp=sharing)
+- [雲端整合以下資料](https://drive.google.com/drive/folders/130g8cAS4XlzX-xoWsCZOlCxZaDfyB-mb?usp=sharing)
+  - https://pixel-boy.itch.io/ninja-adventure-asset-pack
+  - https://kenney.nl/assets/tiny-town
+  - https://kenney.nl/assets/roguelike-rpg-pack
+  - https://kenney.nl/assets/pixel-platformer-farm-expansion
+  - https://kenney.nl/assets/roguelike-indoors
+  - https://kenney.nl/assets/input-prompts-pixel
+  - https://cainos.itch.io/pixel-art-top-down-basic
+  - https://free-game-assets.itch.io/main-characters-home-free-top-down-pixel-art-asset
+
 
 ### 謎題設計與程式碼
 - [數學謎題](https://drive.google.com/drive/folders/19GdAnJRAxfG-m1TFL9cwWt6YUuT6Gq1p?usp=sharing)
