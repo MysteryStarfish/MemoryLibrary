@@ -215,7 +215,7 @@ class LibraryScene extends Scene{
         Transform t = new Transform(width/2, height/2);
         npc.addComponent(t);
 
-        Sprite s = new Sprite("assets/Character/farmer.png", 50, 50);
+        Sprite s = new Sprite("assets/Character/lib_director.png", 50, 50);
         npc.addComponent(s);
 
         NPC m = new NPC(2, 11, 7, npcHandler);
